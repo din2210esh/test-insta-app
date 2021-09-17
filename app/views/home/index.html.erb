@@ -1,0 +1,28 @@
+<% if current_user %>
+<%= link_to "New Post", new_post_path, style: "float:right"%> 
+<div class = "posts-wrapper row">
+	<div class = "post">
+      <div class = "post-head">
+		<% @posts.each do |post| %>
+			<div class = "image text-center">
+			 	<%=image_tag post.image,style: "width: 40%"%>
+			 </div>
+		 	<p class="caption text-center"><%= post.comment%></p>
+		 	<div class="text-center edit-links" >
+		 		<p><%= post.likes.count %> <%= (post.likes.count) == 1 ? 'Like' : 'Likes'%></p>
+		 		<% pre_like = post.likes.find { |like| like.user_id == current_user&.id} %>
+				<% if pre_like %>
+				  <%= button_to 'Unlike', post_like_path(post, pre_like), method: :delete %>
+				<% else %>
+				  <%= button_to 'Like', post_likes_path(post), method: :post %>
+				<% end %>
+		 		<%= link_to 'Edit', edit_post_path(post) %> 
+				|
+				<%= link_to 'Delete', post, method: :delete, data: { confirm: 'Are you sure, you want to delete this?' } %>
+			</div>
+		<%end%>
+		</div>
+	</div>
+</div>
+<%end%>
+
